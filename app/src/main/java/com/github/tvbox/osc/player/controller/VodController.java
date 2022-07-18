@@ -292,10 +292,14 @@ public class VodController extends BaseController {
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
                     int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int st = mPlayerConfig.getInt("st");
-                    st += step
-                    st += step2;
+                    int lt = mPlayerConfig.getInt("lt");
+                    st += step;
+                    lt += step2;
                     if (st > 60 * 6)
                         st = 0;
+                    if (st > 60 * 6)
+
+st = 0;
                     mPlayerConfig.put("st", st);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
@@ -311,7 +315,7 @@ public class VodController extends BaseController {
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5)
                     int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int et = mPlayerConfig.getInt("et");
-                    et += step
+                    et += step;
                     et += step2;
                     if (et > 60 * 6)
                         et = 0;
@@ -382,6 +386,7 @@ public class VodController extends BaseController {
             mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("st") * 1000));
             mPlayerTimeSkipBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("et") * 1000));
             mPlayerTimeStepBtn.setText(Hawk.get(HawkConfig.PLAY_TIME_STEP, 5) + "s");
+            mPlayerTimeStepBtn2.setText(Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3) + "s");
         } catch (JSONException e) {
             e.printStackTrace();
         }
