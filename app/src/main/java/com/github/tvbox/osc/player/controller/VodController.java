@@ -312,7 +312,7 @@ public class VodController extends BaseController {
             @Override
             public void onClick(View view) {
                 try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5)
+                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
                     int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int et = mPlayerConfig.getInt("et");
                     int rt = mPlayerConfig.getInt("rt");
