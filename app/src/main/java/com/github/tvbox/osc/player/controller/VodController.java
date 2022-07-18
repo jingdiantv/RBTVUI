@@ -297,10 +297,10 @@ public class VodController extends BaseController {
                     lt += step2;
                     if (st > 60 * 6)
                         st = 0;
-                    if (st > 60 * 6)
-
-st = 0;
+                    if (lt > 60 * 6)
+                        lt = 0;
                     mPlayerConfig.put("st", st);
+                    mPlayerConfig.put("lt", lt);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                 } catch (JSONException e) {
@@ -315,11 +315,15 @@ st = 0;
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5)
                     int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int et = mPlayerConfig.getInt("et");
+                    int rt = mPlayerConfig.getInt("rt");
                     et += step;
-                    et += step2;
+                    rt += step2;
                     if (et > 60 * 6)
                         et = 0;
+                    if (rt > 60 * 6)
+                        rt = 0;
                     mPlayerConfig.put("et", et);
+                    mPlayerConfig.put("rt", rt);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                 } catch (JSONException e) {
@@ -385,6 +389,8 @@ st = 0;
             mPlayerSpeedBtn.setText("x" + mPlayerConfig.getDouble("sp"));
             mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("st") * 1000));
             mPlayerTimeSkipBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("et") * 1000));
+            mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("lt") * 1000));
+            mPlayerTimeSkipBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("rt") * 1000));
             mPlayerTimeStepBtn.setText(Hawk.get(HawkConfig.PLAY_TIME_STEP, 5) + "s");
             mPlayerTimeStepBtn2.setText(Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3) + "s");
         } catch (JSONException e) {
