@@ -290,8 +290,10 @@ public class VodController extends BaseController {
             public void onClick(View view) {
                 try {
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+                    int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int st = mPlayerConfig.getInt("st");
-                    st += step;
+                    st += step
+                    st += step2;
                     if (st > 60 * 6)
                         st = 0;
                     mPlayerConfig.put("st", st);
@@ -306,9 +308,11 @@ public class VodController extends BaseController {
             @Override
             public void onClick(View view) {
                 try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5)
+                    int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
                     int et = mPlayerConfig.getInt("et");
-                    et += step;
+                    et += step
+                    et += step2;
                     if (et > 60 * 6)
                         et = 0;
                     mPlayerConfig.put("et", et);
@@ -334,12 +338,12 @@ public class VodController extends BaseController {
         mPlayerTimeStepBtn2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                int step = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 5);
-                step += 1;
-                if (step > 3) {
-                    step = 1;
+                int step2 = Hawk.get(HawkConfig.PLAY_TIME_STEP2, 3);
+                step2 += 1;
+                if (step2 > 3) {
+                    step2 = 1;
                 }
-                Hawk.put(HawkConfig.PLAY_TIME_STEP2, step);
+                Hawk.put(HawkConfig.PLAY_TIME_STEP2, step2);
                 updatePlayerCfgView();
             }
         });
