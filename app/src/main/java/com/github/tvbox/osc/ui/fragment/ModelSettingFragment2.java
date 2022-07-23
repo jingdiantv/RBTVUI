@@ -41,7 +41,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * @date :2020/12/23
  * @description:
  */
-public class ModelSettingFragment extends BaseLazyFragment {
+public class ModelSettingFragment2 extends BaseLazyFragment {
     private TextView tvDebugOpen;
     private TextView tvMediaCodec;
     private TextView tvParseWebView;
@@ -54,11 +54,11 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvHomeRec;
     private TextView tvSearchView;
 
-    public static ModelSettingFragment newInstance() {
-        return new ModelSettingFragment().setArguments();
+    public static ModelSettingFragment2 newInstance() {
+        return new ModelSettingFragment2().setArguments();
     }
 
-    public ModelSettingFragment setArguments() {
+    public ModelSettingFragment2 setArguments() {
         return this;
     }
 

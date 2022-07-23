@@ -123,6 +123,13 @@ public class SettingActivity extends BaseActivity {
         mViewPager.setAdapter(pageAdapter);
         mViewPager.setCurrentItem(0);
     }
+    private void initViewPager() {
+        fragments.add(ModelSettingFragment2.newInstance());
+        pageAdapter = new SettingPageAdapter(getSupportFragmentManager(), fragments);
+        mViewPager.setAdapter(pageAdapter);
+        mViewPager.setCurrentItem(0);
+    }
+
 
     private Runnable mDataRunnable = new Runnable() {
         @Override
