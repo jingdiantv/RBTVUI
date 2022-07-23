@@ -22,10 +22,6 @@
             android:text="首页数据源"
             android:textColor="@android:color/white"
             android:textSize="@dimen/ts_24" />
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
         <TextView
             android:id="@+id/tvHomeApi"
             android:layout_width="wrap_content"

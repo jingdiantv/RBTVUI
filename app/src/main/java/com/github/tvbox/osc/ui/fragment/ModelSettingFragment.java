@@ -65,6 +65,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     @Override
     protected int getLayoutResID() {
         return R.layout.fragment_model;
+        return R.layout.activity_home;
     }
 
     @Override
