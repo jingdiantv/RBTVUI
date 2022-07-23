@@ -18,7 +18,6 @@ import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.ui.adapter.SettingMenuAdapter;
 import com.github.tvbox.osc.ui.adapter.SettingPageAdapter;
 import com.github.tvbox.osc.ui.fragment.ModelSettingFragment;
-import com.github.tvbox.osc.ui.fragment.ModelSettingFragment2;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
@@ -123,13 +122,6 @@ public class SettingActivity extends BaseActivity {
         mViewPager.setAdapter(pageAdapter);
         mViewPager.setCurrentItem(0);
     }
-    private void initViewPager() {
-        fragments.add(ModelSettingFragment2.newInstance());
-        pageAdapter = new SettingPageAdapter(getSupportFragmentManager(), fragments);
-        mViewPager.setAdapter(pageAdapter);
-        mViewPager.setCurrentItem(0);
-    }
-
 
     private Runnable mDataRunnable = new Runnable() {
         @Override

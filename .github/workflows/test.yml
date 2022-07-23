@@ -27,5 +27,5 @@ jobs:
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: 肉包TV(改UI版)
+          name: 肉包TV
           path: ${{ github.workspace }}/apk/*
