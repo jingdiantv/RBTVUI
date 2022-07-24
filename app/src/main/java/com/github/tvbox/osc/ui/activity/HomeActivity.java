@@ -47,6 +47,17 @@ import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+import com.github.tvbox.osc.bean.SourceBean;
+import com.github.tvbox.osc.ui.dialog.SelectDialog;
+import com.github.tvbox.osc.util.FastClickCheckUtil;
+import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
+import com.github.tvbox.osc.ui.dialog.AboutDialog;
+import com.github.tvbox.osc.ui.dialog.BackupDialog;
+
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,6 +75,7 @@ public class HomeActivity extends BaseActivity {
     private LinearLayout topLayout;
     private LinearLayout contentLayout;
     private TextView tvDate;
+    private TextView tvHomeApi;
     private TvRecyclerView mGridView;
     private NoScrollViewPager mViewPager;
     private SourceViewModel sourceViewModel;
@@ -88,6 +100,45 @@ public class HomeActivity extends BaseActivity {
             mHandler.postDelayed(this, 1000);
         }
     };
+    @Override
+    protected void init() {
+        tvHomeApi = findViewById(R.id.tvHomeApi);
+        tvHomeApi.setText(ApiConfig.get().getHomeSourceBean().getName());
+        findViewById(R.id.llHomeApi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                List<SourceBean> sites = ApiConfig.get().getSourceBeanList();
+                if (sites.size() > 0) {
+                    SelectDialog<SourceBean> dialog = new SelectDialog<>(mActivity);
+                    dialog.setTip("请选择首页数据源");
+                    dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<SourceBean>() {
+                        @Override
+                        public void click(SourceBean value, int pos) {
+                            ApiConfig.get().setSourceBean(value);
+                            tvHomeApi.setText(ApiConfig.get().getHomeSourceBean().getName());
+                        }
+
+                        @Override
+                        public String getDisplay(SourceBean val) {
+                            return val.getName();
+                        }
+                    }, new DiffUtil.ItemCallback<SourceBean>() {
+                        @Override
+                        public boolean areItemsTheSame(@NonNull @NotNull SourceBean oldItem, @NonNull @NotNull SourceBean newItem) {
+                            return oldItem == newItem;
+                        }
+
+                        @Override
+                        public boolean areContentsTheSame(@NonNull @NotNull SourceBean oldItem, @NonNull @NotNull SourceBean newItem) {
+                            return oldItem.getKey().equals(newItem.getKey());
+                        }
+                    }, sites, sites.indexOf(ApiConfig.get().getHomeSourceBean()));
+                    dialog.show();
+                }
+            }
+        });
+    }
 
     @Override
     protected int getLayoutResID() {
