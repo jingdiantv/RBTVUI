@@ -306,7 +306,7 @@ public class VodController extends BaseController {
                     int st = mPlayerConfig.getInt("st");
                     st += step;
                     //片头最大跳过时间10分钟
-                    if (st > 60 * 10)
+                    if (st > 60 * 6)
                         st = 0;
                     mPlayerConfig.put("st", st);
                     updatePlayerCfgView();
@@ -324,7 +324,7 @@ public class VodController extends BaseController {
                     int et = mPlayerConfig.getInt("et");
                     et += step;
                     //片尾最大跳过时间10分钟
-                    if (et > 60 * 10)
+                    if (et > 60 * 6)
                         et = 0;
                     mPlayerConfig.put("et", et);
                     updatePlayerCfgView();
