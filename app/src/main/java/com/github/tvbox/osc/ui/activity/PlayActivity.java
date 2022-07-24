@@ -53,6 +53,7 @@ import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.XWalkUtils;
+import com.github.tvbox.osc.util.thunder.Thunder;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
@@ -415,13 +416,25 @@ public class PlayActivity extends BaseActivity {
         if (mVodInfo == null || mVodInfo.seriesMap.get(mVodInfo.playFlag) == null) {
             hasNext = false;
         } else {
-            hasNext = mVodInfo.playIndex + 1 < mVodInfo.seriesMap.get(mVodInfo.playFlag).size();
+//修正倒序排序时上一集与下一集播放顺序相反的问题
+//            hasNext = mVodInfo.playIndex + 1 < mVodInfo.seriesMap.get(mVodInfo.playFlag).size();
+            if (mVodInfo.reverseSort){
+                hasNext = mVodInfo.playIndex - 1 >= 0;
+            } else {
+                hasNext = mVodInfo.playIndex + 1 < mVodInfo.seriesMap.get(mVodInfo.playFlag).size();
+            }
         }
         if (!hasNext) {
             Toast.makeText(this, "已经是最后一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
-        mVodInfo.playIndex++;
+//修正倒序排序时上一集与下一集播放顺序相反的问题
+//        mVodInfo.playIndex++;
+        if (mVodInfo.reverseSort){
+            mVodInfo.playIndex--;
+        } else {
+            mVodInfo.playIndex++;
+        }
         play();
     }
 
@@ -430,13 +443,25 @@ public class PlayActivity extends BaseActivity {
         if (mVodInfo == null || mVodInfo.seriesMap.get(mVodInfo.playFlag) == null) {
             hasPre = false;
         } else {
-            hasPre = mVodInfo.playIndex - 1 >= 0;
+//修正倒序排序时上一集与下一集播放顺序相反的问题
+//            hasPre = mVodInfo.playIndex - 1 >= 0;
+            if (mVodInfo.reverseSort){
+                hasPre = mVodInfo.playIndex + 1 < mVodInfo.seriesMap.get(mVodInfo.playFlag).size();
+            } else {
+                hasPre = mVodInfo.playIndex - 1 >= 0;
+            }
         }
         if (!hasPre) {
             Toast.makeText(this, "已经是第一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
-        mVodInfo.playIndex--;
+//修正倒序排序时上一集与下一集播放顺序相反的问题
+//        mVodInfo.playIndex--;
+        if (mVodInfo.reverseSort){
+            mVodInfo.playIndex++;
+        } else {
+            mVodInfo.playIndex--;
+        }
         play();
     }
 
@@ -462,6 +487,28 @@ public class PlayActivity extends BaseActivity {
 
         playUrl(null, null);
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex;
+        if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
+            @Override
+            public void status(int code, String info) {
+                if (code < 0) {
+                    setTip(info, false, true);
+                } else {
+                    setTip(info, true, false);
+                }
+            }
+
+            @Override
+            public void list(String playList) {
+            }
+
+            @Override
+            public void play(String url) {
+                playUrl(url, null);
+            }
+        })) {
+            mController.showParse(false);
+            return;
+        }
         sourceViewModel.getPlay(sourceKey, mVodInfo.playFlag, progressKey, vs.url);
     }
 
@@ -503,7 +550,12 @@ public class PlayActivity extends BaseActivity {
 
     JSONObject jsonParse(String input, String json) throws JSONException {
         JSONObject jsonPlayData = new JSONObject(json);
-        String url = jsonPlayData.getString("url");
+        String url;
+        if (jsonPlayData.has("data")) {
+            url = jsonPlayData.getJSONObject("data").getString("url");
+        } else {
+            url = jsonPlayData.getString("url");
+        }
         String msg = jsonPlayData.optString("msg", "");
         if (url.startsWith("//")) {
             url = "https:" + url;

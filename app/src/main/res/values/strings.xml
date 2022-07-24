@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">肉包TV</string>
+    <!--  app名称   -->
+    <string name="app_name">TVBox</string>
 </resources>
