@@ -435,7 +435,7 @@ public class PlayActivity extends BaseActivity {
         } else {
             mVodInfo.playIndex++;
         }
-        play();
+        play(false);
     }
 
     private void playPrevious() {
@@ -462,7 +462,7 @@ public class PlayActivity extends BaseActivity {
         } else {
             mVodInfo.playIndex--;
         }
-        play();
+        play(false);
     }
 
     private int autoRetryCount = 0;
