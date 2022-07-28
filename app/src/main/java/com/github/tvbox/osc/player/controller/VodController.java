@@ -104,7 +104,7 @@ public class VodController extends BaseController {
 
     Handler myHandle;
     Runnable myRunnable;
-    int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认10秒
+    int myHandleSeconds = 6000;//闲置多少毫秒秒关闭底栏  默认6秒
 
     @Override
     protected void initView() {
@@ -180,6 +180,8 @@ public class VodController extends BaseController {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 long duration = mControlWrapper.getDuration();
                 long newPosition = (duration * seekBar.getProgress()) / seekBar.getMax();
                 mControlWrapper.seekTo((int) newPosition);
@@ -450,6 +452,7 @@ public class VodController extends BaseController {
 
     @Override
     protected void setProgress(int duration, int position) {
+        
         if (mIsDragging) {
             return;
         }
@@ -571,10 +574,12 @@ public class VodController extends BaseController {
 
     @Override
     public boolean onKeyEvent(KeyEvent event) {
+        myHandle.removeCallbacks(myRunnable);
         if (super.onKeyEvent(event)) {
             return true;
         }
         if (isBottomVisible()) {
+            myHandle.postDelayed(myRunnable, myHandleSeconds);
             return super.dispatchKeyEvent(event);
         }
         boolean isInPlayback = isInPlaybackState();
@@ -593,7 +598,7 @@ public class VodController extends BaseController {
                 }
 //            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {  // 闲置开启计时关闭透明底栏
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                myHandle.removeCallbacks(myRunnable);
+               
                 if (!isBottomVisible()) {
                     showBottom();
                     myHandle.postDelayed(myRunnable, myHandleSeconds);
