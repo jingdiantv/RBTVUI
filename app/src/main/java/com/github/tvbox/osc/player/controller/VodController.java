@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.player.controller;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -101,6 +102,10 @@ public class VodController extends BaseController {
     TextView mPlayerTimeSkipBtn;
     TextView mPlayerTimeStepBtn;
 
+    Handler myHandle;
+    Runnable myRunnable;
+    int myHandleSeconds = 5000;//闲置多少毫秒秒关闭底栏  默认5秒
+
     @Override
     protected void initView() {
         super.initView();
@@ -124,6 +129,14 @@ public class VodController extends BaseController {
         mPlayerTimeStartBtn = findViewById(R.id.play_time_start);
         mPlayerTimeSkipBtn = findViewById(R.id.play_time_end);
         mPlayerTimeStepBtn = findViewById(R.id.play_time_step);
+
+        myHandle=new Handler();
+        myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                hideBottom();
+            }
+        };
 
         mGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 0, false));
         ParseAdapter parseAdapter = new ParseAdapter();
@@ -199,6 +212,8 @@ public class VodController extends BaseController {
         mPlayerScaleBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int scaleType = mPlayerConfig.getInt("sc");
                     scaleType++;
@@ -216,6 +231,8 @@ public class VodController extends BaseController {
         mPlayerSpeedBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     float speed = (float) mPlayerConfig.getDouble("sp");
                     speed += 0.25f;
@@ -233,6 +250,8 @@ public class VodController extends BaseController {
         mPlayerBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int playerType = mPlayerConfig.getInt("pl");
                     boolean playerVail = false;
@@ -262,6 +281,8 @@ public class VodController extends BaseController {
         mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     String ijk = mPlayerConfig.getString("ijk");
                     List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
@@ -289,6 +310,8 @@ public class VodController extends BaseController {
         findViewById(R.id.play_time_reset).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     mPlayerConfig.put("et", 0);
                     mPlayerConfig.put("st", 0);
@@ -302,12 +325,14 @@ public class VodController extends BaseController {
         mPlayerTimeStartBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
                     int st = mPlayerConfig.getInt("st");
                     st += step;
                     //片头最大跳过时间10分钟
-                    if (st > 60 * 6)
+                    if (st > 60 * 10)
                         st = 0;
                     mPlayerConfig.put("st", st);
                     updatePlayerCfgView();
@@ -320,12 +345,14 @@ public class VodController extends BaseController {
         mPlayerTimeSkipBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
                     int et = mPlayerConfig.getInt("et");
                     et += step;
                     //片尾最大跳过时间10分钟
-                    if (et > 60 * 6)
+                    if (et > 60 * 10)
                         et = 0;
                     mPlayerConfig.put("et", et);
                     updatePlayerCfgView();
@@ -338,6 +365,8 @@ public class VodController extends BaseController {
         mPlayerTimeStepBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
                 int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
                 step += 5;
                 if (step > 30) {
@@ -562,10 +591,12 @@ public class VodController extends BaseController {
                     togglePlay();
                     return true;
                 }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+//            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {  // 闲置开启计时关闭透明底栏
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                myHandle.removeCallbacks(myRunnable);
                 if (!isBottomVisible()) {
                     showBottom();
+                    myHandle.postDelayed(myRunnable, myHandleSeconds);
                     return true;
                 }
             }
@@ -582,8 +613,11 @@ public class VodController extends BaseController {
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
+        myHandle.removeCallbacks(myRunnable);
         if (!isBottomVisible()) {
             showBottom();
+            // 闲置计时关闭
+            myHandle.postDelayed(myRunnable, myHandleSeconds);
         } else {
             hideBottom();
         }
