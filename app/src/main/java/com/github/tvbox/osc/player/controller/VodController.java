@@ -104,7 +104,7 @@ public class VodController extends BaseController {
 
     Handler myHandle;
     Runnable myRunnable;
-    int myHandleSeconds = 5000;//闲置多少毫秒秒关闭底栏  默认5秒
+    int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认10秒
 
     @Override
     protected void initView() {
@@ -332,7 +332,7 @@ public class VodController extends BaseController {
                     int st = mPlayerConfig.getInt("st");
                     st += step;
                     //片头最大跳过时间10分钟
-                    if (st > 60 * 10)
+                    if (st > 60 * 6)
                         st = 0;
                     mPlayerConfig.put("st", st);
                     updatePlayerCfgView();
@@ -352,7 +352,7 @@ public class VodController extends BaseController {
                     int et = mPlayerConfig.getInt("et");
                     et += step;
                     //片尾最大跳过时间10分钟
-                    if (et > 60 * 10)
+                    if (et > 60 * 6)
                         et = 0;
                     mPlayerConfig.put("et", et);
                     updatePlayerCfgView();
