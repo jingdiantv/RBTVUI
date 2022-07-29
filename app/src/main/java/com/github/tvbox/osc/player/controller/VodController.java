@@ -97,7 +97,7 @@ public class VodController extends BaseController {
     TextView mPlayerBtn;
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
-    //TextView mPlayrefresh;
+    //TextView mPlayrefresh;//注释刷新功能
     TextView mPlayerTimeStartBtn;
     TextView mPlayerTimeSkipBtn;
     TextView mPlayerTimeStepBtn;
@@ -120,7 +120,7 @@ public class VodController extends BaseController {
         mParseRoot = findViewById(R.id.parse_root);
         mGridView = findViewById(R.id.mGridView);
         mPlayerRetry = findViewById(R.id.play_retry);
-        //mPlayrefresh = findViewById(R.id.play_refresh);
+        //mPlayrefresh = findViewById(R.id.play_refresh);//注释刷新功能
         mNextBtn = findViewById(R.id.play_next);
         mPreBtn = findViewById(R.id.play_pre);
         mPlayerScaleBtn = findViewById(R.id.play_scale);
@@ -204,7 +204,7 @@ public class VodController extends BaseController {
                 //listener.replay(false);
                 //hideBottom();
             //}
-        //});
+        //});//注释刷新功能
         mNextBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
