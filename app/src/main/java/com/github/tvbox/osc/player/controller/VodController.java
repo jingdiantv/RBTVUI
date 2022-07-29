@@ -97,7 +97,7 @@ public class VodController extends BaseController {
     TextView mPlayerBtn;
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
-    TextView mPlayrefresh;
+    //TextView mPlayrefresh;
     TextView mPlayerTimeStartBtn;
     TextView mPlayerTimeSkipBtn;
     TextView mPlayerTimeStepBtn;
@@ -120,7 +120,7 @@ public class VodController extends BaseController {
         mParseRoot = findViewById(R.id.parse_root);
         mGridView = findViewById(R.id.mGridView);
         mPlayerRetry = findViewById(R.id.play_retry);
-        mPlayrefresh = findViewById(R.id.play_refresh);
+        //mPlayrefresh = findViewById(R.id.play_refresh);
         mNextBtn = findViewById(R.id.play_next);
         mPreBtn = findViewById(R.id.play_pre);
         mPlayerScaleBtn = findViewById(R.id.play_scale);
@@ -198,13 +198,13 @@ public class VodController extends BaseController {
                 hideBottom();
             }
         });
-        mPlayrefresh.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.replay(false);
-                hideBottom();
-            }
-        });
+        //mPlayrefresh.setOnClickListener(new OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+                //listener.replay(false);
+                //hideBottom();
+            //}
+        //});
         mNextBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
