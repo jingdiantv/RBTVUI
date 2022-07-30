@@ -592,9 +592,6 @@ public class VodController extends BaseController {
         int action = event.getAction();
         if (isBottomVisible()) {
             myHandle.postDelayed(myRunnable, myHandleSeconds);
-            if (keyCode == KeyEvent.KEYCODE_DPAD_UP ) {
-                return true;
-            }
             return super.dispatchKeyEvent(event);
         }
         boolean isInPlayback = isInPlaybackState();
@@ -604,7 +601,7 @@ public class VodController extends BaseController {
                     tvSlideStart(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ? 1 : -1);
                     return true;
                 }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
                 if (isInPlayback) {
                     togglePlay();
                     return true;
