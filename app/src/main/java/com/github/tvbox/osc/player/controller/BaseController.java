@@ -92,7 +92,7 @@ public abstract class BaseController extends BaseVideoController implements Gest
 
     private TextView mSlideInfo;
     private ProgressBar mLoading;
-    private ViewGroup mPauseRoot;
+    protected ViewGroup mPauseRoot;
     private TextView mPauseTime;
 
     @Override

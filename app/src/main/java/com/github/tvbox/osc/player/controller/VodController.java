@@ -21,6 +21,7 @@ import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
+import com.github.tvbox.osc.util.Clock;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.orhanobut.hawk.Hawk;
@@ -39,6 +40,7 @@ import xyz.doikki.videoplayer.util.PlayerUtils;
 import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
 
 public class VodController extends BaseController {
+
     public VodController(@NonNull @NotNull Context context) {
         super(context);
         mHandlerCallback = new HandlerCallback() {
@@ -55,11 +57,14 @@ public class VodController extends BaseController {
                     }
                     case 1002: { // 显示底部菜单
                         mBottomRoot.setVisibility(VISIBLE);
+                        timeInfo.setVisibility(View.VISIBLE);
                         mBottomRoot.requestFocus();
                         break;
                     }
                     case 1003: { // 隐藏底部菜单
                         mBottomRoot.setVisibility(GONE);
+                        if(VodController.super.mPauseRoot.getVisibility() == View.GONE)
+                            timeInfo.setVisibility(View.GONE);
                         break;
                     }
                     case 1004: { // 设置速度
@@ -81,6 +86,7 @@ public class VodController extends BaseController {
 
     SeekBar mSeekBar;
     TextView mCurrentTime;
+    TextView timeInfo;
     TextView mTotalTime;
     boolean mIsDragging;
     LinearLayout mProgressRoot;
@@ -109,6 +115,7 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
+        timeInfo = findViewById(R.id.tv_info_time);
         mCurrentTime = findViewById(R.id.curr_time);
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
@@ -130,6 +137,9 @@ public class VodController extends BaseController {
         mPlayerTimeStartBtn = findViewById(R.id.play_time_start);
         mPlayerTimeSkipBtn = findViewById(R.id.play_time_end);
         mPlayerTimeStepBtn = findViewById(R.id.play_time_step);
+
+        Clock.start(timeInfo);
+        timeInfo.setVisibility(View.GONE);
 
         myHandle=new Handler();
         myRunnable = new Runnable() {
@@ -549,9 +559,12 @@ public class VodController extends BaseController {
             case VideoView.STATE_IDLE:
                 break;
             case VideoView.STATE_PLAYING:
+                if(mBottomRoot.getVisibility() == View.GONE)
+                    timeInfo.setVisibility(View.GONE);
                 startProgress();
                 break;
             case VideoView.STATE_PAUSED:
+                timeInfo.setVisibility(View.VISIBLE);
                 break;
             case VideoView.STATE_ERROR:
                 listener.errReplay();
